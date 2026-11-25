@@ -3,6 +3,7 @@ package com.eazybytes.springai.config;
 import com.eazybytes.springai.advisor.TokenUsageAuditAdvisor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.util.List;
@@ -12,7 +13,9 @@ public class ChatClientConfig {
 
     @Bean
     public ChatClient chatClient(ChatClient.Builder chatClientBuilder) {
+        var options = OpenAiChatOptions.builder().model("gpt-5.4-mini").temperature(0.8);
         return chatClientBuilder
+                .defaultOptions(options)
                 .defaultAdvisors(List.of(new SimpleLoggerAdvisor(), new TokenUsageAuditAdvisor()))
                 .defaultSystem("""
                         You are an internal IT helpdesk assistant. Your role is to assist
